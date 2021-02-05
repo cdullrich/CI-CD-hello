@@ -18,8 +18,8 @@ node('master')
             stage ('build Go code')
             {
                 echo "building application"
-                sh 'sudo go get github.com/gorilla/mux'
-                sh 'sudo env GOOS=linux GOARCH=amd64 go build -o HomeAdvisor'
+                sh 'go get github.com/gorilla/mux'
+                sh 'env GOOS=linux GOARCH=amd64 go build -o HomeAdvisor'
             }
             stage ('finish making sandwich')
             {
