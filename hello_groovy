@@ -35,8 +35,9 @@ node('master')
             }
             stage ('test build')
             {
+                sh 'sudo -s docker run -p 3000:3000 hello-advisor'
                 echo "verifying build's expected http response"
-                sh 'sudo -s docker run -p 3000:3000 ./hello-advisor'
+                sh 'sleep 5'
                 def http_test = sh 'curl http://localhost:3000'
                 if (http_test.content != 'Hello, HomeAdvisor!') {
                     error "Pipeline aborted due to failed GoLang API test. HTTP content from test: ${http_test.content}"
