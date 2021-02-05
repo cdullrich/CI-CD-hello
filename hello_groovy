@@ -52,7 +52,7 @@ node('master')
         }
         catch (err) {
             echo "woopsie doopsie: ${err}"
-            docker container stop $(docker container list -q)
+            sh 'docker container stop $(docker container list -q)'
             currentBuild.result = 'FAILURE'
         }
     }
