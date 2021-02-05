@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM ubuntu:latest
 COPY HomeAdvisor .
 EXPOSE 3000
 CMD [ "./HomeAdvisor"]
