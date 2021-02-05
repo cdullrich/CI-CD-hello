@@ -19,7 +19,7 @@ node('master')
             {
                 echo "building application"
                 sh 'go get github.com/gorilla/mux'
-                sh 'env GOOS=linux GOARCH=amd64 go build -o ./HomeAdvisor'
+                sh 'env GOOS=linux GOARCH=amd64 go build -o HomeAdvisor'
             }
             stage ('dockerize build')
             {
@@ -35,7 +35,7 @@ node('master')
             }
             stage ('test build')
             {
-                sh 'sudo -s docker run -p 30000:30000 hello-advisor'
+                sh 'sudo -s docker run -d -p 30000:30000 hello-advisor'
                 echo "verifying build's expected http response"
                 sh 'sleep 5'
                 def http_test = sh 'curl http://localhost:3000'
