@@ -19,7 +19,9 @@ node('master')
             {
                 echo "building application"
                 sh 'go get github.com/gorilla/mux'
-                sh 'env GOOS=linux GOARCH=amd64 go build -o HomeAdvisor'
+                sh 'cd ./go-code'
+                sh 'env GOOS=linux GOARCH=amd64 go build -o ../HomeAdvisor'
+                sh 'cd ..'
             }
             stage ('finish making sandwich')
             {
@@ -39,8 +41,8 @@ node('master')
                 echo "verifying build's expected http response"
                 sh 'docker run -p 3000:3000 hello-advisor'
                 def http_test = sh 'curl http://localhost:3000'
-                if (http_test != 'Hello, HomeAdvisor!') {
-                    error "Pipeline aborted due to failed GoLang API test. Results from test: ${http_test}"
+                if (http_test.content != 'Hello, HomeAdvisor!') {
+                    error "Pipeline aborted due to failed GoLang API test. HTTP content from test: ${http_test.content}"
                 }
             }
             stage ('deploy to cluster')

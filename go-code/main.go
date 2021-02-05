@@ -7,7 +7,7 @@ import(
 
 func main(){
 	http.HandleFunc("/", HomeAdvisor)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":3000", nil)
 }
 
 func HomeAdvisor(w http.ResponseWriter, r *http.Request) {
