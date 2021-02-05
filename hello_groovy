@@ -1,0 +1,20 @@
+node('master')
+{
+    timestamps{
+        try {
+            stage ('Cleanup Workspace') {
+                echo "Cleaning workspace: ${env.WORKSPACE}"
+                deleteDir()
+            }
+            stage ('Checkout Hello Code')
+            {
+                git branch: 'master'
+                    url: 'https://githubhttps://github.com/cdullrich/CI-CD-hello/main.go'
+            }
+            stage ('echo')
+            {
+                echo "just confirming funcitonality so far"
+            }
+        }
+    }
+}
