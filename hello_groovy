@@ -8,12 +8,11 @@ node('master')
             }
             stage ('Checkout Hello Code')
             {
-                git branch: 'master'
-                    url: 'https://githubhttps://github.com/cdullrich/CI-CD-hello/main.go'
+                git url: 'https://githubhttps://github.com/cdullrich/CI-CD-hello/main.go'
             }
             stage ('echo')
             {
-                echo "just confirming funcitonality so far"
+                echo "just confirming functionality so far"
             }
         }
         catch (err) {
