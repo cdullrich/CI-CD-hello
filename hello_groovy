@@ -26,7 +26,7 @@ node('master')
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '9bd0098f-db72-4ec1-b29b-051e0c635eb8', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     echo "dockerizing build"
                     sh 'podman login registry.redhat.io -u ${USERNAME} -p ${PASSWORD}'
-                    sh 'docker build -t hello-advisor .'
+                    sh 'sudo docker build -t hello-advisor .'
                 }
             }
             stage ('eat the sandwich')
