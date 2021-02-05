@@ -11,7 +11,7 @@ node('master')
                 echo "checking out code"
                 git url: 'https://github.com/cdullrich/CI-CD-hello/'
             }
-            stage ('begin making a sandwich')
+            stage ('make a sandwich')
             {
                 echo "I am so hungry, I need a sandwich!"
             }
@@ -19,22 +19,18 @@ node('master')
             {
                 echo "building application"
                 sh 'go get github.com/gorilla/mux'
-                sh 'cd ./go-code'
-                sh 'env GOOS=linux GOARCH=amd64 go build -o ../HomeAdvisor'
-                sh 'cd ..'
-            }
-            stage ('finish making sandwich')
-            {
-                echo "This sandwich is going to taste so good!"
+                echo "moving to go-code folder..."
+                echo "moved"
+                sh 'env GOOS=linux GOARCH=amd64 go build -o HomeAdvisor'
             }
             stage ('dockerize build')
             {
                 echo "dockerizing build"
                 sh 'docker build -t hello-advisor .'
             }
-            stage ('eat sandwich')
+            stage ('eat the sandwich')
             {
-                echo "nomnomnomnom!"
+                echo "This sandwich is going to taste so good! Nomnomnomnom!"
             }
             stage ('test build')
             {
@@ -45,6 +41,10 @@ node('master')
                     error "Pipeline aborted due to failed GoLang API test. HTTP content from test: ${http_test.content}"
                 }
             }
+            stage ('publish to artifactory')
+            {
+                echo "we don't actually have artifactory linked up, but we would do it here"
+            }
             stage ('deploy to cluster')
             {
                 echo "deploying build to production (let's do this last)"
@@ -52,6 +52,8 @@ node('master')
         }
         catch (err) {
             echo "woopsie doopsie: ${err}"
+            docker container stop $(docker container list -q)
+            currentBuild.result = 'FAILURE'
         }
     }
 }
