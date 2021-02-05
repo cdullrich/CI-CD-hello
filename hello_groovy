@@ -40,7 +40,8 @@ node('master')
                 sh 'sudo -s docker run -d -p 30000:30000 hello-advisor'
                 echo "verifying build's expected http response"
                 sh 'sleep 5'
-                def http_test = "curl http://localhost:30000".execute().text
+                def testcmd = "curl http://localhost:30000"
+                def http_test = testcmd.execute().text
                 echo "response is ${http_test}" 
                 assert http_test == 'Hello, HomeAdvisor!'
             }
