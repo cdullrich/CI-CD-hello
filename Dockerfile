@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:latest
 COPY HomeAdvisor .
 EXPOSE 3000
 CMD [ "./HomeAdvisor"]
