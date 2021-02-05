@@ -40,10 +40,11 @@ node('master')
                 sh 'sudo -s docker run -d -p 30000:30000 hello-advisor'
                 echo "verifying build's expected http response"
                 sh 'sleep 5'
-                def testcmd = "curl http://localhost:30000"
-                def http_test = sh testcmd
+                def http_test = sh 'curl http://localhost:30000'
                 echo "response is ${http_test}" 
-                assert http_test == 'Hello, HomeAdvisor!'
+                if (http_test != 'Hello, HomeAdvisor!') {
+                    error 'Pipeline aborted due to failed GoLang API test. HTTP content from test: ${http_test}''
+                }
             }
             stage ('publish to artifactory')
             {
