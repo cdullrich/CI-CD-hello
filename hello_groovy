@@ -19,7 +19,7 @@ node('master')
             {
                 echo "building application"
                 sh 'go get github.com/gorilla/mux'
-                sh 'env GOOS=linux GOARCH=amd64 go build -o HomeAdvisor'
+                sh 'env GOOS=linux GOARCH=amd64 go build -o ./HomeAdvisor'
             }
             stage ('dockerize build')
             {
