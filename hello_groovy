@@ -41,7 +41,7 @@ node('master')
                 echo "verifying build's expected http response"
                 sh 'sleep 5'
                 def http_test = sh 'curl http://localhost:30000'
-                if (http_test != 'Hello, HomeAdvisor!') {
+                if (${http_test} != 'Hello, HomeAdvisor!') {
                     error "Pipeline aborted due to failed GoLang API test. HTTP content from test: ${http_test.content}"
                 }
             }
