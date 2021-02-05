@@ -8,15 +8,48 @@ node('master')
             }
             stage ('Checkout Hello Code')
             {
+                echo "checking out code"
                 git url: 'https://github.com/cdullrich/CI-CD-hello/'
             }
-            stage ('echo')
+            stage ('begin making a sandwich')
             {
-                echo "just confirming functionality so far"
+                echo "I am so hungry, I need a sandwich!"
+            }
+            stage ('build Go code')
+            {
+                echo "building application"
+                sh 'sudo go get github.com/gorilla/mux'
+                sh 'sudo env GOOS=linux GOARCH=amd64 go build -o HomeAdvisor'
+            }
+            stage ('finish making sandwich')
+            {
+                echo "This sandiwch is going to taste so good!"
+            }
+            stage ('dockerize build')
+            {
+                echo "dockerizing build"
+                sh 'docker build -t hello-advisor .'
+            }
+            stage ('eat sandwich')
+            {
+                echo "nomnomnomnom!"
+            }
+            stage ('test build')
+            {
+                echo "verifying build's expected http response"
+                sh 'docker run -p 3000:3000 hello-advisor'
+                def http_test = sh 'curl http://localhost:3000'
+                if (http_test != 'Hello, HomeAdvisor!') {
+                    error "Pipeline aborted due to failed GoLang API test. Results from test: ${http_test}"
+                }
+            }
+            stage ('deploy to cluster')
+            {
+                echo "deploying build to production (let's do this last)"
             }
         }
         catch (err) {
-            echo "woopsie daisy: ${err}"
+            echo "woopsie doopsie: ${err}"
         }
     }
 }
