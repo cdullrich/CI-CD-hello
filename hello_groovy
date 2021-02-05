@@ -42,7 +42,7 @@ node('master')
                 sh 'sleep 5'
                 def http_test = sh 'curl http://localhost:30000'
                 if (${http_test} != 'Hello, HomeAdvisor!') {
-                    error "Pipeline aborted due to failed GoLang API test. HTTP content from test: ${http_test.content}"
+                    error "Pipeline aborted due to failed GoLang API test. HTTP content from test: ${http_test}"
                 }
             }
             stage ('publish to artifactory')
