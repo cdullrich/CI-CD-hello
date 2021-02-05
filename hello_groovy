@@ -5,6 +5,8 @@ node('master')
             stage ('Cleanup Workspace') {
                 echo "Cleaning workspace: ${env.WORKSPACE}"
                 deleteDir()
+                sh 'sudo docker rm -f -a'
+                sh 'sudo docker rmi -af'
             }
             stage ('Checkout Hello Code')
             {
@@ -54,7 +56,8 @@ node('master')
         }
         catch (err) {
             echo "woopsie doopsie: ${err}"
-            sh 'docker system prune -af'
+            echo "cleaning up docker images and containers"
+            sh 'sudo docker system prune -af'
             currentBuild.result = 'FAILURE'
         }
     }
