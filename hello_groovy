@@ -1,6 +1,5 @@
 node('master')
 {
-    echo "Job start"
     timestamps{
         try {
             stage ('Cleanup Workspace') {
@@ -17,6 +16,10 @@ node('master')
                 echo "just confirming funcitonality so far"
             }
         }
+        catch (err) {
+            echo "woopsie daisy: ${err}"
+        }
     }
 }
+
 
