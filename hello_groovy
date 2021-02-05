@@ -23,7 +23,7 @@ node('master')
             }
             stage ('finish making sandwich')
             {
-                echo "This sandiwch is going to taste so good!"
+                echo "This sandwich is going to taste so good!"
             }
             stage ('dockerize build')
             {
