@@ -35,7 +35,7 @@ node('master')
                 echo "verifying build's expected http response"
                 sh 'sleep 5'
                 def http_test = ''
-                http_test = sh(script: 'curl http://localhost:30000' returnStdout: true).trim()
+                http_test = sh(script: 'curl http://localhost:30000', returnStdout: true).trim()
                 echo "The response to the API follows-"
                 echo "${http_test}" 
                 if (http_test != 'Hello, HomeAdvisor!') {
