@@ -13,10 +13,6 @@ node('master')
                 echo "checking out code"
                 git url: 'https://github.com/cdullrich/CI-CD-hello/'
             }
-            stage ('make a sandwich')
-            {
-                echo "I am so hungry, I need a sandwich!"
-            }
             stage ('build Go code')
             {
                 echo "building application"
@@ -25,15 +21,11 @@ node('master')
             }
             stage ('dockerize build')
             {
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '9bd0098f-db72-4ec1-b29b-051e0c635eb8', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'RedHatDocker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     echo "dockerizing build"
                     sh 'podman login registry.redhat.io -u ${USERNAME} -p ${PASSWORD}'
                     sh 'sudo -s docker build -t hello-advisor .'
                 }
-            }
-            stage ('eat the sandwich')
-            {
-                echo "This sandwich is going to taste so good! Nomnomnomnom!"
             }
             stage ('test build')
             {
@@ -41,7 +33,7 @@ node('master')
                 echo "verifying build's expected http response"
                 sh 'sleep 5'
                 def http_test = sh 'curl http://localhost:30000'
-                echo "response is ${http_test}" 
+                echo "${http_test}" 
                 if (http_test != 'Hello, HomeAdvisor!') {
                     error "Pipeline aborted due to failed GoLang API test. HTTP content from test: ${http_test}"
                 }
