@@ -5,6 +5,9 @@ node('master')
             stage ('Cleanup Workspace') {
                 echo "Cleaning workspace: ${env.WORKSPACE}"
                 deleteDir()
+                sh 'sudo docker stop $(docker ps -aq)'
+                sh 'sudo docker rm $(docker ps -aq)'
+                sh 'sudo docker rmi $(docker images -q)'
                 sh 'sudo docker system prune -af'
             }
             stage ('Checkout Hello Code')
@@ -32,7 +35,7 @@ node('master')
                 echo "verifying build's expected http response"
                 sh 'sleep 5'
                 def http_test = ''
-                http_test = sh(script: 'curl http://localhost:30000')
+                http_test = sh(script: 'curl http://localhost:30000' returnStdout: true).trim()
                 echo "The response to the API follows-"
                 echo "${http_test}" 
                 if (http_test != 'Hello, HomeAdvisor!') {
