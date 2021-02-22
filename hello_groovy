@@ -6,8 +6,6 @@ node('master')
                 echo "Cleaning workspace: ${env.WORKSPACE}"
                 deleteDir()
                 sh 'sudo docker system prune -af'
-                sh 'sudo docker rm $(sudo docker ps -a) -f'
-                sh 'sudo docker rmi $(sudo docker images -a -q)'
             }
             stage ('Checkout Hello Code')
             {
