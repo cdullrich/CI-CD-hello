@@ -22,7 +22,7 @@ node('master')
             {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'RedHatDocker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     echo "dockerizing build"
-                    sh 'podman login registry.redhat.io -u ${USERNAME} -p ${PASSWORD}'
+                    sh 'docker login registry.redhat.io -u ${USERNAME} -p ${PASSWORD}'
                     sh 'sudo -s docker build -t hello-advisor .'
                 }
             }
