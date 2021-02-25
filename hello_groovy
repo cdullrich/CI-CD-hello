@@ -55,7 +55,7 @@ node('master')
             {
                 echo "pushing docker image"
                 sh 'sudo -s docker tag hello-advisor:latest 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
-                sudo 'sudo -s docker push 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
+                sh 'sudo -s docker push 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
             }
             stage ('deploy to kubernetes cluster')
             {
