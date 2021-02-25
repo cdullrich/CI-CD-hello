@@ -60,7 +60,7 @@ node('master')
                 try {
                     sh 'kubectl expose deployment cdu-hello-advisor --type=LoadBalancer --name=hello-advisor-endpoint'
                 }
-                catch {
+                catch (err) {
                     sh 'kubectl annotate services hello-advisor-endpoint service.beta.kubernetes.io/aws-load-balancer-internal=”0.0.0.0/0"'
                 }
             }
