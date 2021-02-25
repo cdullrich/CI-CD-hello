@@ -5,9 +5,9 @@ node('master')
             stage ('Cleanup Workspace') {
                 echo "Cleaning workspace: ${env.WORKSPACE}"
                 deleteDir()
-                sh 'sudo docker stop $(docker ps -aq)'
-                sh 'sudo docker rm $(docker ps -aq)'
-                sh 'sudo docker rmi $(docker images -q)'
+                sh 'sudo docker stop $(docker ps -aq) -f'
+                sh 'sudo docker rm $(docker ps -aq) -f'
+                sh 'sudo docker rmi $(docker images -q) -f'
                 sh 'sudo docker system prune -af'
             }
             stage ('Checkout Hello Code')
@@ -44,7 +44,7 @@ node('master')
             }
             stage ('publish to artifactory')
             {
-                echo "we don't actually have artifactory linked up, but we would do it here"
+                echo "we don't actually have artifactory linked up, but we would probably build compiled code to it here"
             }
             stage ('push docker image')
             {
