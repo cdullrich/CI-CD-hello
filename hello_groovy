@@ -5,10 +5,15 @@ node('master')
             stage ('Cleanup Workspace') {
                 echo "Cleaning workspace: ${env.WORKSPACE}"
                 deleteDir()
+                try{
                 sh 'sudo docker stop $(docker ps -aq)'
                 sh 'sudo docker rm $(docker ps -aq)'
                 sh 'sudo docker rmi -f $(docker images -q)'
                 sh 'sudo docker system prune -af'
+                }
+                catch (err) {
+                    echo "while cleaning images: ${err}"
+                }
             }
             stage ('Checkout Hello Code')
             {
