@@ -55,7 +55,7 @@ node('master')
             {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-ecr', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
                     echo "pushing docker image"
-                    sh 'sudo aws ecr get-login-password --region us-east-1 | docker login --username ${USERNAME} --password-stdin ${PASSWORD}'
+                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 742886329884.dkr.ecr.us-east-1.amazonaws.com'
                     sh 'sudo -s docker tag hello-advisor:latest 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
                     sh 'sudo -s docker push 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
                 }
