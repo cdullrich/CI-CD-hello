@@ -1,5 +1,9 @@
 node('master')
 {
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('AccessKey')
+        AWS_SECRET_ACCESS_KEY = credentials('secretaws')
+    }
     timestamps{
         try {
             stage ('Cleanup Workspace') {
@@ -53,12 +57,12 @@ node('master')
             }
             stage ('push docker image')
             {
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-ecr', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]){
-                    echo "pushing docker image"
-                    sh '/usr/local/bin/aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 742886329884.dkr.ecr.us-east-1.amazonaws.com'
-                    sh 'sudo -s docker tag hello-advisor:latest 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
-                    sh 'sudo -s docker push 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
-                }
+                echo "pushing docker image"
+                sh '/usr/local/bin/aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}'
+                sh '/usr/local/bin/aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}'
+                sh '/usr/local/bin/aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 742886329884.dkr.ecr.us-east-1.amazonaws.com'
+                sh 'sudo -s docker tag hello-advisor:latest 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
+                sh 'sudo -s docker push 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
             }
             stage ('deploy to kubernetes cluster')
             {
