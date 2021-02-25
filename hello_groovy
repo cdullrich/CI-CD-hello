@@ -32,7 +32,7 @@ node('master')
             stage ('test build')
             {
                 sh 'sudo -s docker run -d -p 30000:30000 hello-advisor'
-                echo "verifying build's expected http response"
+                echo "Waiting and verifying build's expected http response"
                 sh 'sleep 5'
                 def http_test = ''
                 http_test = sh(script: 'curl http://localhost:30000', returnStdout: true).trim()
@@ -46,9 +46,23 @@ node('master')
             {
                 echo "we don't actually have artifactory linked up, but we would do it here"
             }
-            stage ('deploy to cluster')
+            stage ('push docker image')
             {
-                echo "deploying build to production (let's do this last)"
+                echo "pushing docker image"
+                sh 'sudo docker tag hello-advisor:latest 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
+                sudo 'sudo docker push 742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest'
+            }
+            stage ('deploy to kubernetes cluster')
+            {
+                echo "deploying build to production"
+                sh 'kubectl run cdu-hello-advisor --image=742886329884.dkr.ecr.us-east-1.amazonaws.com/cdu-containers:latest --requests=cpu=500m --expose --port=30000'
+                sh 'kubectl autoscale deployment cdu-hello-advisor --cpu-percent=50 --min=1 --max=10'
+                try {
+                    sh 'kubectl expose deployment cdu-hello-advisor --type=LoadBalancer --name=hello-advisor-endpoint'
+                }
+                catch {
+                    sh 'kubectl annotate services hello-advisor-endpoint service.beta.kubernetes.io/aws-load-balancer-internal=”0.0.0.0/0"'
+                }
             }
         }
         catch (err) {
@@ -59,5 +73,3 @@ node('master')
         }
     }
 }
-
-
